@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
+        <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2/dist/tailwind.min.css" rel="stylesheet" type="text/css" />
+    </head>
+    <style>
+        body {
+            background: #ff9966;        
+            background: -webkit-linear-gradient(to right, #ff5e62, #ff9966);  
+            background: linear-gradient(to right, #ff5e62, #ff9966); 
+        }
+
+        .bg-custom {
+            background-color: #2F4858;
+        }
+
+        .shadow-custom {
+            filter: drop-shadow( 3px 3px 5px rgba(0, 0, 0, .5));
+        }
+
+        input {
+            position: relative;
+            z-index: 1;
+            border-radius: 0;
+            border-width: 0 0 1px;
+            border-bottom-color: rgba(0,0,0,0.25);
+            height: auto;
+            padding: 3px 0 5px;
+        }
+    </style>
+    <body class="flex justify-around items-center text-white">
+
+        <div class="flex mt-24 justify-around flex-col w-4/12 bg-white shadow-custom">
+            <div class="flex justify-around p-3 items-center bg-custom">
+                Speakers List 
+            </div>
+
+            <div class="flex justify-around items-center p-3 text-gray-400">
+                <div class="relative w-full">
+                    <input id="todo-input" class="p-3 relative w-full outline-none" type="text" placeholder="Add Item....">
+                        <i onclick="addItem()" class="fa fa-plus z-10 cursor-pointer p-2 text-center hover:text-blue-600 absolute top-1/2 transform -translate-y-1/2 right-2"></i>
+                    </input>
+                </div>
+            </div>
+
+            <ul class="flex justify-around flex-col text-gray-400" id="todo">
+                
+            </ul>
+
+        </div>
+
+    </body>
+    <script>
+        let items = JSON.parse(localStorage.getItem('todo-list')) || [];
+
+        function addItem() {
+            let inputBox = document.querySelector('#todo-input');
+            let item = inputBox.value
+            
+            if (item === "")
+                return alert("You need to put in a number");
+
+            items.push({
+                value: item
+            })
+            
+            localStorage.setItem('todo-list', JSON.stringify(items));
+            
+            listItems();
+            
+            inputBox.value = "";
+        }
+
+        function deleteItem(index) {
+            items.splice(index, 1);
+            localStorage.setItem('todo-list', JSON.stringify(items))
+            listItems();
+        }
+
+        function listItems() {
+            let list = "";
+            for (let i = 0; i < items.length; i++) {
+
+                list += `
+                <li class="p-2 rounded-lg" >
+                    <div class="flex align-middle flex-row justify-between">
+                        <div class="p-2">
+                            <p class="text-lg text-gray-400">${items[i].value}</p>
+                        </div>
+                        <button onclick='deleteItem("+ i +")' class="text-red-500 p-2">
+                            <i class="fa fa-trash-can"></i>
+                        </button>
+                    </div>
+                    <hr class="mt-2"/>
+                </li>
+                `;
+                
+            }
+            document.querySelector("#todo").innerHTML = list;
+        }
+
+        (function() {
+            listItems();
+        })();
+    </script>
+</html>
